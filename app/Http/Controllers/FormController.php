@@ -4,8 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Form;
+use Auth;
 class FormController extends Controller
 {
+    
+
+   public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function create(){
     	return view('create');
     }
@@ -35,11 +44,13 @@ class FormController extends Controller
 
          $form= new Form();
          $form->filename=json_encode($data);
-         
+        //inserting user id  foreign key in form  
+         $userId = Auth::id();
+         $form->user_id = $userId; 
         
         $form->save();
-
-        return back()->with('success', 'Your images has been successfully');
+        // dd($form);
+        return back()->with('success', 'Your images has been successfully uploaded');
     }
 
 
